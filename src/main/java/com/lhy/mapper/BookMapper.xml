@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhy.mapper.BookMapper">
+ 	
+ 	<resultMap type="com.lhy.entity.Book" id="bookMap">
+ 		<id column="id" property="id"/>
+ 		<result column="bname" property="bname"/>
+ 		<result column="author" property="author"/>
+ 		<result column="photo" property="photo"/>
+ 		<result column="createtime" property="createtime"/>
+ 		<association property="press" javaType="com.lhy.entity.Press">
+ 		
+ 			<id column="pid" property="pid"/>
+ 			<result column="pname" property="pname"/>
+ 		</association>
+ 	</resultMap>
+ 	
+ 	<select id="blist" resultMap="bookMap">
+ 		select * from t_book b left join t_press p on b.pid = p.pid where 1=1
+ 		 <if test="start!='' and start!=null">
+ 			 and  createtime > #{start}
+ 		</if>
+ 		<if test="end!='' and end!=null">
+ 			and createtime&lt;#{end} 
+ 		</if>
+ 		<if test="lname!='' and lname!=null">
+ 			and bname like concat('%',concat(#{lname},'%'))
+ 		</if>
+ 		
+ 		ORDER BY id 
+ 		limit #{pageUtil.startIndex},#{pageUtil.pageSize}
+ 	</select>
+ 	
+ 	 <select id="count" resultType="int">
+ 		select count(*) from t_book b left join t_press p on b.pid = p.pid where 1=1
+ 		<if test="start!='' and start!=null">
+ 			and  createtime > #{start} 
+ 		</if>
+ 		<if test="end!='' and end!=null">
+ 			and	createtime&lt;#{end} 
+ 		</if>
+ 		<if test="lname!='' and lname!=null">
+ 			and bname like concat('%',concat(#{lname},'%'))
+ 		</if> 
+ 	</select>
+ 	
+ 	<select id="plist" resultType="com.lhy.entity.Press">
+ 		select * from t_press
+ 	</select>
+ 	<insert id="add">
+ 		insert into t_book(bname,price,author,photo,createtime,pid) values(#{bname},#{price},#{author},#{photo},#{createtime},#{press.pid})
+ 	</insert>
+</mapper>

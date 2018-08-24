@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/day14
+    username: root
+    password: root
+  mvc:
+    view:
+      prefix: /jsp/
+      suffix: .jsp
+      
+  resources:
+    static-locations: classpath:/resources/**
+    
+mybatis:
+  mapper-locations: classpath:com/lhy/mapper/*.xml
+  
+logging:
+  level:
+    com:
+      lhy:
+        mapper: debug
+         
+    
+  
+  
